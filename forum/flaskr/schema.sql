@@ -20,7 +20,10 @@ VALUES('kategori1'),('kategori2'),('kategori3');
 
 CREATE TABLE thread (
     id INTEGER PRIMARY KEY AUTOINCREMENT ,
-    title TEXT NOT NULL
+    title TEXT NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    category_id INTEGER
+    FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
 CREATE TABLE post (

@@ -19,7 +19,7 @@ def category(category_id):
     db = get_db()
     category = db.execute(
         'SELECT * FROM category WHERE id=?;', (str(category_id)))
-    return render_template('forum/posts.html')
+    return render_template('forum/threads.html')
 
 @bp.route('/posts')
 def posts():

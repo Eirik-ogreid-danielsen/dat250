@@ -18,7 +18,7 @@ def index():
 def category(category_id):
     db = get_db()
     threads = db.execute(
-        'SELECT rowid, * FROM thread;')
+        'SELECT rowid, * FROM thread WHERE category_id=?;',(str(category_id)))
     return render_template('forum/threads.html', threads = threads)
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')

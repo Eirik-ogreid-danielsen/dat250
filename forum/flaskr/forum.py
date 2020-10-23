@@ -14,6 +14,13 @@ def index():
     categories = db.execute('SELECT rowid, * FROM category;')
     return render_template('forum/index.html', categories = categories)
 
+@bp.route('/category/<int:category_id>')
+def category(category_id):
+    db = get_db()
+    category = db.execute(
+        'SELECT * FROM category WHERE id=?;', (str(category_id)))
+    return render_template('forum/posts.html')
+
 @bp.route('/posts')
 def posts():
     db = get_db()

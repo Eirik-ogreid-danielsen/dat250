@@ -24,9 +24,10 @@ def category(category_id):
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
 def thread(thread_id,category_id):
     db = get_db()
-    category = db.execute(
-        'SELECT * FROM thread WHERE id=?;', (str(thread_id)))
-    return render_template('forum/posts.html')
+    posts = db.execute(
+        'SELECT rowid, * FROM post'
+    ).fetchall()
+    return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')
 def posts():
@@ -40,7 +41,7 @@ def posts():
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
-def create():
+def create(thread_id,):
     if request.method == 'POST':
         body = request.form['body']
         error = None
@@ -50,16 +51,17 @@ def create():
         if error is not None:
             flash(error)
         else:
+
             db = get_db()
             db.execute(
-                'INSERT INTO post (body, author_id)'
-                ' VALUES ( ?, ?)',
-                (body, g.user['id'])
+                'INSERT INTO post (body, author_id, thread_id)'
+                ' VALUES ( ?, ?,?)',
+                (body, g.user['id'],str(thread_id))
             )
             db.commit()
-            return redirect(url_for('forum.posts'))
+            return redirect(url_for('forum.posts',thread_id=thread_id))
 
-    return render_template('forum/create.html')
+    return render_template('forum/create.html',thread_id=thread_id)
 
 def get_post(id, check_author=True):
     post = get_db().execute(

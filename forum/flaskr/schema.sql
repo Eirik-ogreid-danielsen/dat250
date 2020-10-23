@@ -21,10 +21,13 @@ VALUES('kategori1'),('kategori2'),('kategori3');
 CREATE TABLE thread (
     id INTEGER PRIMARY KEY AUTOINCREMENT ,
     title TEXT NOT NULL,
-    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     category_id INTEGER
-    FOREIGN KEY (author_id) REFERENCES user (id)
+    
 );
+
+INSERT INTO thread (
+  title, category_id)
+VALUES('threadd1','1'),('thread2','2'),('thread3','3');
 
 CREATE TABLE post (
   id INTEGER PRIMARY KEY AUTOINCREMENT ,

@@ -20,7 +20,7 @@ def index():
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
-def create():
+def create(thread_id,):
     if request.method == 'POST':
         title = request.form['title']
         body = request.form['body']
@@ -32,6 +32,7 @@ def create():
         if error is not None:
             flash(error)
         else:
+
             db = get_db()
             db.execute(
                 'INSERT INTO post (title, body, author_id)'
@@ -41,7 +42,7 @@ def create():
             db.commit()
             return redirect(url_for('forum.index'))
 
-    return render_template('forum/create.html')
+    return render_template('forum/create.html',thread_id=thread_id)
 
 def get_post(id, check_author=True):
     post = get_db().execute(

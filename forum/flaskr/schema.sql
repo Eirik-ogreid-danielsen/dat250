@@ -9,10 +9,6 @@ CREATE TABLE user (
   password TEXT NOT NULL
 );
 
-INSERT INTO user (
-  username, password)
-VALUES('tester1','hunter1'),('tester2','hunter2'),('tester3','hunter3');
-
 CREATE TABLE category (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL
@@ -20,7 +16,7 @@ CREATE TABLE category (
 
 INSERT INTO category (
   title)
-VALUES('kategori1'),('kategori2'),('kategori3');
+VALUES('Spill'),('Dyr'),('Grønnsaker');
 
 CREATE TABLE thread (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,7 +27,7 @@ CREATE TABLE thread (
 
 INSERT INTO thread (
   title, category_id)
-VALUES('threadd1','1'),('thread2','2'),('thread3','3');
+VALUES('Halo','1'),('League of Legends','1'),("Baldur's Gate 3",'1'),('Katt','2'),('Hund','2'),("Ape",'2'),('Brokkoli','3'),('Gresskar','3'),("Potet",'3');
 
 CREATE TABLE post (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,6 +38,3 @@ CREATE TABLE post (
   thread_id INTEGER NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
-INSERT INTO post (
-  author_id, body,thread_id)
-VALUES('tester1','test1','1'),('tester2','test12','1'),('tester3','test13','1'),('tester1','test21','2'),('tester2','test21','2'),('tester3','test23','2'),('tester1','test31','3'),('tester2','test32','3'),('tester3','test33','3');

@@ -12,6 +12,7 @@ import re
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
+import re
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
@@ -36,8 +37,14 @@ def register():
                     nLower += 1
                 if c.isalpha():
                     nAlphanum += 1
-            if nUpper == 0 or nLower == 0 or nAlphanum == 0 or regex.search(password) == None:
-                error = 'Password must include:\n 1 Upper Case letter\n 1 Lower Case Letter 1 Special Character 1 Numeric'
+            if nUpper == 0:
+                error = 'Password must include 1 Upper Case leter'
+            if nLower == 0:
+                error = 'Password must include 1 Lower Case Letter'
+            if nAlphanum == 0:
+                error = 'Password must include 1 Numeric digit'
+            if regex.search(password) == None:
+                error = 'Password must include 1 Special Character 1'
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
@@ -54,6 +61,7 @@ def register():
         flash(error)
 
     return render_template('auth/register.html')
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():

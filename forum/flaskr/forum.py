@@ -27,8 +27,7 @@ def thread(thread_id,category_id):
     session["thread_id"]=thread_id
     db = get_db()
     posts = db.execute(
-        'SELECT rowid, * FROM post'
-    ).fetchall()
+        'SELECT rowid, * FROM post WHERE thread_id=?', (str(thread_id)))
     return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')

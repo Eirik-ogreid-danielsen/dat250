@@ -45,7 +45,7 @@ def register():
                 error = 'Password must include 1 Numeric digit'
             if regex.search(password) == None:
                 error = 'Password must include 1 Special Character 1'
-        elif db.execute(
+        if db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)

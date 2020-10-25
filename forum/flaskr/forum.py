@@ -50,6 +50,8 @@ def create():
         if "category_id" in session:
             category_id = session["category_id"]
         error = None
+        if not body:
+            error = 'Body is required.'
 
         if error is not None:
             flash(error)
@@ -90,19 +92,20 @@ def update(id):
         
         body = request.form['body']
         error = None
-
+        if not body:
+            error = 'Body is required.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET , body = ?'
+                'UPDATE post SET body = ?'
                 ' WHERE id = ?',
-                ( body, id)
+                (body, id)
             )
             db.commit()
-            return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))
+            return redirect(url_for('forum.index'))
 
     return render_template('forum/update.html', post=post)
 
@@ -113,4 +116,4 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('forum.posts'))
+    return redirect(url_for('forum.index'))

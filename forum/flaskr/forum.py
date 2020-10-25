@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, session
 )
 from werkzeug.exceptions import abort
 
@@ -16,6 +16,7 @@ def index():
 
 @bp.route('/category/<int:category_id>')
 def category(category_id):
+    session["category_id"]=category_id
     db = get_db()
     threads = db.execute(
         'SELECT rowid, * FROM thread WHERE category_id=?;',(str(category_id)))
@@ -23,6 +24,7 @@ def category(category_id):
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
 def thread(thread_id,category_id):
+    session["thread_id"]=thread_id
     db = get_db()
     posts = db.execute(
         'SELECT rowid, * FROM post'
@@ -41,27 +43,28 @@ def posts():
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
-def create(thread_id,):
+def create():
     if request.method == 'POST':
         body = request.form['body']
+        if "thread_id" in session:
+            thread_id = session["thread_id"]
+        if "category_id" in session:
+            category_id = session["category_id"]
         error = None
-
-       
 
         if error is not None:
             flash(error)
         else:
-
             db = get_db()
             db.execute(
                 'INSERT INTO post (body, author_id, thread_id)'
                 ' VALUES ( ?, ?,?)',
-                (body, g.user['id'],str(thread_id))
+                (body, g.user['id'],thread_id)
             )
             db.commit()
-            return redirect(url_for('forum.posts',thread_id=thread_id))
+            return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))
 
-    return render_template('forum/create.html',thread_id=thread_id)
+    return render_template('forum/create.html')
 
 def get_post(id, check_author=True):
     post = get_db().execute(
@@ -100,7 +103,7 @@ def update(id):
                 ( body, id)
             )
             db.commit()
-            return redirect(url_for('forum.posts'))
+            return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))
 
     return render_template('forum/update.html', post=post)
 

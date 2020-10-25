@@ -51,9 +51,10 @@ def register():
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
+            prehash = password+username
             db.execute(
                 'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                (username, generate_password_hash(prehash))
             )
             db.commit()
             return redirect(url_for('auth.login'))
@@ -68,6 +69,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        prehash = password+username
         db = get_db()
         error = None
         user = db.execute(
@@ -76,7 +78,7 @@ def login():
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['password'], prehash):
             error = 'Incorrect password.'
 
         if error is None:

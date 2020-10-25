@@ -89,7 +89,10 @@ def update(id):
     post = get_post(id)
 
     if request.method == 'POST':
-        
+        if "thread_id" in session:
+            thread_id = session["thread_id"]
+        if "category_id" in session:
+            category_id = session["category_id"]
         body = request.form['body']
         error = None
         if not body:
@@ -105,15 +108,19 @@ def update(id):
                 (body, id)
             )
             db.commit()
-            return redirect(url_for('forum.index'))
+            return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))
 
     return render_template('forum/update.html', post=post)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
+    if "thread_id" in session:
+        thread_id = session["thread_id"]
+    if "category_id" in session:
+        category_id = session["category_id"]
     get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('forum.index'))
+    return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))

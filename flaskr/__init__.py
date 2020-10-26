@@ -11,7 +11,7 @@ def create_app(test_config=None):
         SECRET_KEY = 'scuffed',
         DATABASE = os.environ['DATABASE_URL'],
     )
-    DATABASE = 'database.db'
+
     if test_config is None:
         app.config.from_pyfile('config.py', silent = True)
     else:
@@ -25,20 +25,9 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
-    
-    def get_db():
-        db = getattr(g, '_database', None)
-        if db is None:
-            db = g._database = psycopg2.connect(DATABASE)
-        return db
 
-    def init_db():
-        with app.app_context():
-            db = get_db()
-            with app.open_resource('schema.sql', mode='r') as f:
-                db.cursor().execute(f.read())
-            db.commit()
-
+    from . import db
+    db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)

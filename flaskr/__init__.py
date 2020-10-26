@@ -7,6 +7,7 @@ import os
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
+    app.app_context()
     app.config.from_mapping(
         SECRET_KEY = 'scuffed',
         DATABASE = os.environ['DATABASE_URL'],

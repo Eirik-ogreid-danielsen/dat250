@@ -54,7 +54,7 @@ def register():
             prehash = password+username
             query_db(
                 'INSERT INTO user (username, password) VALUES (%s, %s)',
-                (username, generate_password_hash(prehash))
+                (username, generate_password_hash(prehash), )
             )
             db.commit()
             return redirect(url_for('auth.login'))

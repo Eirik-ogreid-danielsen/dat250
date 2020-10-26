@@ -19,7 +19,7 @@ def category(category_id):
     session["category_id"]=category_id
     #db = get_db()
     threads = query_db(
-        'SELECT id, * FROM thread WHERE category_id=%s;',(category_id))
+        'SELECT id, * FROM thread WHERE category_id=%s;',(category_id, ))
     return render_template('forum/threads.html', threads = threads)
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
@@ -27,7 +27,7 @@ def thread(thread_id,category_id):
     session["thread_id"]=thread_id
     #db = get_db()
     posts = query_db(
-        'SELECT id, * FROM post WHERE thread_id=%s', (thread_id))
+        'SELECT id, * FROM post WHERE thread_id=%s', (thread_id, ))
     return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')
@@ -61,7 +61,7 @@ def create():
             query_db(
                 'INSERT INTO post (body, author_id, thread_id)'
                 ' VALUES ( %s, %s, %s)',
-                (body, g.user['id'],thread_id)
+                (body, g.user['id'],thread_id, )
             )
             db.commit()
             return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))
@@ -107,7 +107,7 @@ def update(id):
             query_db(
                 'UPDATE post SET body = %s'
                 ' WHERE id = %s',
-                (body, id)
+                (body, id, )
             )
             db.commit()
             return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))

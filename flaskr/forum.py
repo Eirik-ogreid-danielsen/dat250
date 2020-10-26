@@ -11,7 +11,7 @@ bp = Blueprint('forum', __name__)
 @bp.route('/')
 def index():
     #db = get_db()  
-    categories = query_db('SELECT rowid, * FROM category;')
+    categories = query_db('SELECT id, * FROM category;')
     return render_template('forum/index.html', categories = categories)
 
 @bp.route('/category/<int:category_id>')
@@ -19,7 +19,7 @@ def category(category_id):
     session["category_id"]=category_id
     #db = get_db()
     threads = query_db(
-        'SELECT rowid, * FROM thread WHERE category_id=%s;',(category_id))
+        'SELECT id, * FROM thread WHERE category_id=%s;',(category_id))
     return render_template('forum/threads.html', threads = threads)
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
@@ -27,7 +27,7 @@ def thread(thread_id,category_id):
     session["thread_id"]=thread_id
     #db = get_db()
     posts = query_db(
-        'SELECT rowid, * FROM post WHERE thread_id=%s', (thread_id))
+        'SELECT id, * FROM post WHERE thread_id=%s', (thread_id))
     return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')

@@ -6,6 +6,7 @@ blinker==1.4
 certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
+cloud-init==20.2
 colorama==0.4.3
 command-not-found==0.3
 configobj==5.0.6
@@ -18,7 +19,7 @@ distro-info===0.23ubuntu1
 entrypoints==0.3
 filelock==3.0.12
 Flask==1.1.2
--e git+https://github.com/Eirik-ogreid-danielsen/dat250.git@7af905776fc870c556444fcb4ba5bfcfcd49cd18#egg=flaskr&subdirectory=forum
+-e git+https://github.com/Eirik-ogreid-danielsen/dat250.git@208e7dadda2579429ec8659acd56cc859c3c39b0#egg=flaskr&subdirectory=forum
 gunicorn==20.0.4
 httplib2==0.14.0
 hyperlink==19.0.0
@@ -42,6 +43,7 @@ mccabe==0.6.1
 more-itertools==4.2.0
 netifaces==0.10.4
 oauthlib==3.1.0
+psycopg2-binary==2.8.6
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 PyGObject==3.36.0

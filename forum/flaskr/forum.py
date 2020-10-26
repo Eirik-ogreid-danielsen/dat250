@@ -11,29 +11,29 @@ bp = Blueprint('forum', __name__)
 @bp.route('/')
 def index():
     db = get_db()
-    categories = db.execute('SELECT rowid, * FROM category;')
+    categories = db.query_db('SELECT rowid, * FROM category;')
     return render_template('forum/index.html', categories = categories)
 
 @bp.route('/category/<int:category_id>')
 def category(category_id):
     session["category_id"]=category_id
     db = get_db()
-    threads = db.execute(
-        'SELECT rowid, * FROM thread WHERE category_id=?;',(str(category_id)))
+    threads = db.query_db(
+        'SELECT rowid, * FROM thread WHERE category_id=%s;',(category_id))
     return render_template('forum/threads.html', threads = threads)
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
 def thread(thread_id,category_id):
     session["thread_id"]=thread_id
     db = get_db()
-    posts = db.execute(
-        'SELECT rowid, * FROM post WHERE thread_id=?', (str(thread_id)))
+    posts = db.query_db(
+        'SELECT rowid, * FROM post WHERE thread_id=%s', (thread_id))
     return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')
 def posts():
     db = get_db()
-    posts = db.execute(
+    posts = db.query_db(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
@@ -58,9 +58,9 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.execute(
+            db.query_db(
                 'INSERT INTO post (body, author_id, thread_id)'
-                ' VALUES ( ?, ?,?)',
+                ' VALUES ( %s, %s, %s)',
                 (body, g.user['id'],thread_id)
             )
             db.commit()
@@ -69,10 +69,11 @@ def create():
     return render_template('forum/create.html')
 
 def get_post(id, check_author=True):
-    post = get_db().execute(
+    db = get_db()
+    post = db.query_db(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
+        ' WHERE p.id = %s',
         (id,)
     ).fetchone()
 
@@ -103,9 +104,9 @@ def update(id):
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                'UPDATE post SET body = ?'
-                ' WHERE id = ?',
+            db.query_db(
+                'UPDATE post SET body = %s'
+                ' WHERE id = %s',
                 (body, id)
             )
             db.commit()
@@ -122,6 +123,6 @@ def delete(id):
         category_id = session["category_id"]
     get_post(id)
     db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.query_db('DELETE FROM post WHERE id = %s', (id,))
     db.commit()
     return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))

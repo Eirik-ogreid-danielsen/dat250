@@ -45,15 +45,15 @@ def register():
                 error = 'Password must include 1 Numeric digit'
             if regex.search(password) == None:
                 error = 'Password must include 1 Special Character 1'
-        if db.execute(
-            'SELECT id FROM user WHERE username = ?', (username,)
+        if db.query_db(
+            'SELECT id FROM user WHERE username = %s', (username,)
         ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
             prehash = password+username
-            db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
+            db.query_db(
+                'INSERT INTO user (username, password) VALUES (%s, %s)',
                 (username, generate_password_hash(prehash))
             )
             db.commit()
@@ -72,8 +72,8 @@ def login():
         prehash = password+username
         db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
+        user = db.query_db(
+            'SELECT * FROM user WHERE username = %s', (username,)
         ).fetchone()
 
         if user is None:
@@ -97,8 +97,8 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+        g.user = get_db().query_db(
+            'SELECT * FROM user WHERE id = %s', (user_id,)
         ).fetchone()
 
 @bp.route('/logout')

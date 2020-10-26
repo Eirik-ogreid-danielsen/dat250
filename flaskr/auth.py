@@ -6,7 +6,7 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from flaskr.db import get_db
-
+from flaskr.db import query_db
 import re
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -45,14 +45,14 @@ def register():
                 error = 'Password must include 1 Numeric digit'
             if regex.search(password) == None:
                 error = 'Password must include 1 Special Character 1'
-        if db.query_db(
+        if query_db(
             'SELECT id FROM user WHERE username = %s', (username,)
         ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
             prehash = password+username
-            db.query_db(
+            query_db(
                 'INSERT INTO user (username, password) VALUES (%s, %s)',
                 (username, generate_password_hash(prehash))
             )
@@ -72,7 +72,7 @@ def login():
         prehash = password+username
         db = get_db()
         error = None
-        user = db.query_db(
+        user = query_db(
             'SELECT * FROM user WHERE username = %s', (username,)
         ).fetchone()
 
@@ -97,7 +97,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().query_db(
+        g.user = query_db(
             'SELECT * FROM user WHERE id = %s', (user_id,)
         ).fetchone()
 

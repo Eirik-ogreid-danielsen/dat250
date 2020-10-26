@@ -5,35 +5,35 @@ from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
-
+from flaskr.db import query_db
 bp = Blueprint('forum', __name__)
 
 @bp.route('/')
 def index():
-    db = get_db()
-    categories = db.query_db('SELECT rowid, * FROM category;')
+    #db = get_db()  
+    categories = query_db('SELECT rowid, * FROM category;')
     return render_template('forum/index.html', categories = categories)
 
 @bp.route('/category/<int:category_id>')
 def category(category_id):
     session["category_id"]=category_id
-    db = get_db()
-    threads = db.query_db(
+    #db = get_db()
+    threads = query_db(
         'SELECT rowid, * FROM thread WHERE category_id=%s;',(category_id))
     return render_template('forum/threads.html', threads = threads)
 
 @bp.route('/category/<int:category_id>/thread/<int:thread_id>')
 def thread(thread_id,category_id):
     session["thread_id"]=thread_id
-    db = get_db()
-    posts = db.query_db(
+    #db = get_db()
+    posts = query_db(
         'SELECT rowid, * FROM post WHERE thread_id=%s', (thread_id))
     return render_template('forum/posts.html', posts=posts, thread_id=thread_id)
 
 @bp.route('/posts')
 def posts():
-    db = get_db()
-    posts = db.query_db(
+    #db = get_db()
+    posts = query_db(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' ORDER BY created DESC'
@@ -58,7 +58,7 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.query_db(
+            query_db(
                 'INSERT INTO post (body, author_id, thread_id)'
                 ' VALUES ( %s, %s, %s)',
                 (body, g.user['id'],thread_id)
@@ -69,8 +69,8 @@ def create():
     return render_template('forum/create.html')
 
 def get_post(id, check_author=True):
-    db = get_db()
-    post = db.query_db(
+    #db = get_db()
+    post = query_db(
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN user u ON p.author_id = u.id'
         ' WHERE p.id = %s',
@@ -104,7 +104,7 @@ def update(id):
             flash(error)
         else:
             db = get_db()
-            db.query_db(
+            query_db(
                 'UPDATE post SET body = %s'
                 ' WHERE id = %s',
                 (body, id)
@@ -123,6 +123,6 @@ def delete(id):
         category_id = session["category_id"]
     get_post(id)
     db = get_db()
-    db.query_db('DELETE FROM post WHERE id = %s', (id,))
+    query_db('DELETE FROM post WHERE id = %s', (id,))
     db.commit()
     return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))

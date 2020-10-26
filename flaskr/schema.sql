@@ -27,7 +27,7 @@ CREATE TABLE thread (
 
 INSERT INTO thread (
   title, category_id)
-VALUES('Halo','1'),('League of Legends','1'),('Katt','2'),('Hund','2'),("Ape",'2'),('Brokkoli','3'),('Gresskar','3'),("Potet",'3');
+VALUES('Halo','1'),('League of Legends','1'),('Katt','2'),('Hund','2'),('Brokkoli','3'),('Gresskar','3');
 
 CREATE TABLE post (
   ID  SERIAL PRIMARY KEY,

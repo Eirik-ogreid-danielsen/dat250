@@ -35,7 +35,7 @@ def posts():
     #db = get_db()
     posts = query_db(
         'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' FROM post p JOIN usertemp u ON p.author_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
     return render_template('forum/index.html', posts=posts)
@@ -72,7 +72,7 @@ def get_post(id, check_author=True):
     #db = get_db()
     post = query_db(
         'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' FROM post p JOIN usertemp u ON p.author_id = u.id'
         ' WHERE p.id = %s',
         (id,)
     ).fetchone()

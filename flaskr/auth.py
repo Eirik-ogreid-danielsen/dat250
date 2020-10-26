@@ -46,14 +46,14 @@ def register():
             if regex.search(password) == None:
                 error = 'Password must include 1 Special Character 1'
         if query_db(
-            'SELECT ID FROM user WHERE username = %s', (username,)
+            'SELECT ID FROM usertemp WHERE username = %s', (username,)
         ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:
             prehash = password+username
             query_db(
-                'INSERT INTO user (username, password) VALUES (%s, %s)',
+                'INSERT INTO usertemp (username, password) VALUES (%s, %s)',
                 (username, generate_password_hash(prehash), )
             )
             db.commit()
@@ -73,7 +73,7 @@ def login():
         db = get_db()
         error = None
         user = query_db(
-            'SELECT * FROM user WHERE username = %s', (username,)
+            'SELECT * FROM usertemp WHERE username = %s', (username,)
         ).fetchone()
 
         if user is None:
@@ -98,7 +98,7 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = query_db(
-            'SELECT * FROM user WHERE id = %s', (user_id,)
+            'SELECT * FROM usertemp WHERE id = %s', (user_id,)
         ).fetchone()
 
 @bp.route('/logout')

@@ -7,11 +7,11 @@ import os
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    app.app_context()
     app.config.from_mapping(
         SECRET_KEY = 'scuffed',
         DATABASE = os.environ['DATABASE_URL'],
     )
+    
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent = True)
@@ -23,12 +23,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
     from . import db
-    db.init_db()
+    with app.app_context():
+        db.init_db()
+    
 
     from . import auth
     app.register_blueprint(auth.bp)

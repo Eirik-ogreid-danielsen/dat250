@@ -8,7 +8,6 @@ from flask.cli import with_appcontext
 
 DATABASE = os.environ['DATABASE_URL']
 def get_db():
-    with app.app_context():
         db = getattr(g, '_database', None)
         if db is None:
             db = g._database = psycopg2.connect(DATABASE)

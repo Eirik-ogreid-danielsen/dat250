@@ -47,7 +47,7 @@ def register():
                 error = 'Password must include 1 Special Character 1'
         if query_db(
             'SELECT ID FROM usertemp WHERE username = %s', (username,)
-        ).fetchone() is not None:
+        ).fetchall() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:

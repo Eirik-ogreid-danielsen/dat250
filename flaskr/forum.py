@@ -44,7 +44,6 @@ def posts():
 @login_required
 def create():
     if request.method == 'POST':
-        title = request.form['title']
         body = request.form['body']
         if "thread_id" in session:
             thread_id = session["thread_id"]

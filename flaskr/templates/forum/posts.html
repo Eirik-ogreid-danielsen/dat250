@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-  {% for post in posts|reverse %}
+  {% for post in posts %}
     {%if thread_id == post['thread_id'] %}
       <article class="post">
         <header>

@@ -31,10 +31,11 @@ VALUES('Halo','1'),('League of Legends','1'),('Katt','2'),('Hund','2'),('Brokkol
 
 CREATE TABLE post (
   ID  SERIAL PRIMARY KEY,
-  author_id TEXT UNIQUE NOT NULL,
+  author_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  username TEXT UNIQUE NOT NULL,
   body TEXT NOT NULL,
   thread_id INTEGER NOT NULL,
-  FOREIGN KEY (author_name) REFERENCES usertemp (username)
+  FOREIGN KEY (author_id) REFERENCES usertemp (id)
 
 );

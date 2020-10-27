@@ -37,7 +37,7 @@ def posts():
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN usertemp u ON p.author_id = u.id'
         ' ORDER BY created DESC'
-    ).fetchall()
+    )
     return render_template('forum/index.html', posts=posts)
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -74,8 +74,7 @@ def get_post(id, check_author=True):
         'SELECT p.id, title, body, created, author_id, username'
         ' FROM post p JOIN usertemp u ON p.author_id = u.id'
         ' WHERE p.id = %s',
-        (id,)
-    ).fetchone()
+        (id,), True)
 
     if post is None:
         abort(404, "Post id {0} doesn't exist.".format(id))

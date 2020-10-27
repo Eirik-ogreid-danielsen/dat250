@@ -35,6 +35,6 @@ CREATE TABLE post (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   body TEXT NOT NULL,
   thread_id INTEGER NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES usertemp (id)
+  FOREIGN KEY (author_id) REFERENCES usertemp (username)
 
 );

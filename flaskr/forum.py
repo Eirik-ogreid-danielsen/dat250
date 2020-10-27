@@ -58,9 +58,9 @@ def create():
         else:
             db = get_db()
             query_db(
-                'INSERT INTO post (body, author_id, postusername, thread_id)'
-                ' VALUES ( %s, %s, %s, %s)',
-                (body, g.user['id'], g.user['username'], thread_id, )
+                'INSERT INTO post (body, author_id, thread_id)'
+                ' VALUES ( %s, %s, %s)',
+                (body, g.user['id'], thread_id, )
             )
             db.commit()
             return redirect(url_for('forum.thread', category_id=category_id, thread_id=thread_id))

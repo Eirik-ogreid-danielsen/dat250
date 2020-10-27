@@ -58,7 +58,7 @@ def create():
         else:
             db = get_db()
             query_db(
-                'INSERT INTO post (body, author_id, thread_id, username)'
+                'INSERT INTO post (body, author_id, thread_id, post_username)'
                 ' VALUES ( %s, %s, %s, %s)',
                 (body, g.user['id'], thread_id, g.user['username'] )
             )

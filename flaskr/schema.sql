@@ -33,7 +33,7 @@ CREATE TABLE post (
   ID  SERIAL PRIMARY KEY,
   author_id INTEGER NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  username TEXT NOT NULL,
+  post_username TEXT NOT NULL,
   body TEXT NOT NULL,
   thread_id INTEGER NOT NULL,
   FOREIGN KEY (author_id) REFERENCES usertemp (id)

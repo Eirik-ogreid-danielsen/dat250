@@ -20,7 +20,7 @@ def register():
         password = request.form['password']
         db = get_db()
         error = None
-        cursor = connection.cursor()
+
         if not username:
             error = 'Username is required.'
         elif not password:
@@ -45,9 +45,9 @@ def register():
                 error = 'Password must include 1 Numeric digit'
             if regex.search(password) == None:
                 error = 'Password must include 1 Special Character 1'
-        cursor.execute(
-            'SELECT ID FROM usertemp WHERE username = %s', (username,))
-        if cursor.fetchone() is not None:
+        if query_db(
+            'SELECT ID FROM usertemp WHERE username = %s', (username,)
+        ).fetchone() is not None:
             error = 'User {} is already registered.'.format(username)
 
         if error is None:

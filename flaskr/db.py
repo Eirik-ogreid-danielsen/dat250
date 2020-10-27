@@ -29,9 +29,9 @@ def init_db():
 def query_db(query, args=(), one=False):
     cur = get_db().cursor(cursor_factory=psycopg2.extras.DictCursor)
     cur.execute(query, args)
-    rv = cur.fetchall()
     if cur.description is None:
         return None
+    rv = cur.fetchall()
     cur.close()
     return (rv[0] if rv else None) if one else rv
 
